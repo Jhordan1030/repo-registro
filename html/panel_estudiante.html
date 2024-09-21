@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Estudiante</title>
+    <link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+    <h2>Panel de Estudiante</h2>
+    <h3>Matriculación en Nuevas Materias</h3>
+    
+    <form action="../php/matricular.php" method="POST">
+        <label for="materia">Seleccionar Materia:</label>
+        <select name="materia" id="materia" required>
+            <?php
+            include '../php/conexion.php';
+            $sql = "SELECT * FROM asignaturas";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                echo "<option value='" . $row['id_asignatura'] . "'>" . htmlspecialchars($row['nombre_asignatura']) . "</option>";
+            }
+            ?>
+        </select>
+        <button type="submit">Matricularme</button>
+    </form>
+    
+    <h3>Mis Notas</h3>
+    <table border="1">
+        <tr>
+            <th>Materia</th>
+            <th>Calificación</th>
+            <th>Fecha de Registro</th>
+        </tr>
+        <?php include '../php/ver_notas.php'; ?>
+    </table>
+</body>
+</html>

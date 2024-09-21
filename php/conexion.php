@@ -1,13 +1,13 @@
 <?php
-$host = 'localhost';  // Cambia si es necesario
-$dbname = 'registro_notas';  // Nombre de la base de datos
-$username = 'root';  // Usuario de MySQL
-$password = '';  // Contraseña de MySQL (cambia si es necesario)
+$host = 'localhost';
+$dbname = 'registro_notas';
+$user = 'root'; // Cambia esto si tienes otro usuario
+$password = ''; // Cambia esto si tienes otra contraseña
 
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $conn = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    echo "Conexión fallida: " . $e->getMessage();
+} catch (PDOException $e) {
+    echo "Error de conexión: " . $e->getMessage();
 }
 ?>

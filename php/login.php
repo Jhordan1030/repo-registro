@@ -1,25 +1,31 @@
 <?php
+session_start();
 include 'conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $correo = $_POST['correo'];
-    $password = $_POST['password'];
+    $contraseña = $_POST['contraseña'];
 
     $sql = "SELECT * FROM usuarios WHERE correo = :correo";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':correo', $correo);
     $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user && password_verify($password, $user['contraseña'])) {
-        if ($user['rol'] == 'docente') {
-            header("Location: ../html/docente_panel.html");
+    
+    if ($stmt->rowCount() > 0) {
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (password_verify($contraseña, $usuario['contraseña'])) {
+            $_SESSION['usuario'] = $usuario;
+            if ($usuario['rol'] == 'docente') {
+                header("Location: ../html/panel_docente.html");
+            } else {
+                header("Location: ../html/panel_estudiante.html");
+            }
+            exit();
         } else {
-            header("Location: ../html/estudiante_panel.html");
+            echo "Contraseña incorrecta.";
         }
-        exit();
     } else {
-        echo "Correo o contraseña incorrectos.";
+        echo "Usuario no encontrado.";
     }
 }
 ?>

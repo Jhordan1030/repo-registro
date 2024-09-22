@@ -1,1 +1,3 @@
 arreglar errores de subir notas 
+
+https://www.notion.so/Curso-Git-e8d0bce24fe2432f88dc31287440fcb0?pvs=4

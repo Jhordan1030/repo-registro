@@ -5,3 +5,6 @@ https://www.notion.so/Curso-Git-e8d0bce24fe2432f88dc31287440fcb0?pvs=4
 se eliminara todo y se creara un nuevo proyecto
 
 se creo uina rama-cambios3 y se elimino todo los archivos
+
+
+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

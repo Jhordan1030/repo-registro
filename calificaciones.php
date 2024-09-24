@@ -154,8 +154,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['materia_id'], $_POST[
         <?php endif; ?>
 
         <div class="footer">
-            <button onclick="window.history.back();">Regresar</button>
-        </div>
+    <button onclick="window.location.href='panel_docente.php';">Regresar</button>
+</div>
+
     </div>
 </body>
 </html>

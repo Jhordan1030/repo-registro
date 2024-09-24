@@ -2,6 +2,7 @@
 session_start();
 include 'config.php';
 
+// Verificar si el docente está autenticado
 if (!isset($_SESSION['usuario'])) {
     header("Location: index.php");
     exit();
@@ -23,9 +24,11 @@ if ($nivel_docente) {
 }
 
 // Procesar la asignación de calificaciones
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['materia_id'], $_POST['calificacion'], $_POST['estudiante_id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['materia_id'], $_POST['parcial1'], $_POST['parcial2'], $_POST['promedio'], $_POST['estudiante_id'])) {
     $materia_id = $_POST['materia_id'];
-    $calificacion = $_POST['calificacion'];
+    $parcial1 = $_POST['parcial1'];
+    $parcial2 = $_POST['parcial2'];
+    $promedio = $_POST['promedio'];
     $estudiante_id = $_POST['estudiante_id'];
 
     // Verificar si ya existe un registro de calificación
@@ -33,16 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['materia_id'], $_POST[
     $result_check = $conn->query($sql_check);
 
     if ($result_check && $result_check->num_rows > 0) {
-        // Actualizar la calificación existente
-        $sql_update = "UPDATE notas SET calificacion = $calificacion WHERE id_estudiante = $estudiante_id AND id_materia = $materia_id";
+        // Actualizar las calificaciones existentes
+        $sql_update = "UPDATE notas SET parcial1 = $parcial1, parcial2 = $parcial2, promedio = $promedio WHERE id_estudiante = $estudiante_id AND id_materia = $materia_id";
         if ($conn->query($sql_update) === TRUE) {
-            $message = "Calificación actualizada correctamente.";
+            $message = "Calificaciones actualizadas correctamente.";
         }
     } else {
-        // Insertar nueva calificación
-        $sql_insert = "INSERT INTO notas (id_estudiante, id_materia, calificacion) VALUES ($estudiante_id, $materia_id, $calificacion)";
+        // Insertar nuevas calificaciones
+        $sql_insert = "INSERT INTO notas (id_estudiante, id_materia, parcial1, parcial2, promedio) VALUES ($estudiante_id, $materia_id, $parcial1, $parcial2, $promedio)";
         if ($conn->query($sql_insert) === TRUE) {
-            $message = "Calificación asignada correctamente.";
+            $message = "Calificaciones asignadas correctamente.";
         }
     }
 }
@@ -52,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['materia_id'], $_POST[
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Calificaciones</title>
+    <title>Asignación de Calificaciones</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -110,6 +113,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['materia_id'], $_POST[
             margin-top: 20px;
         }
     </style>
+    <script>
+        // Calcular el promedio automáticamente
+        function calcularPromedio() {
+            const parcial1 = parseFloat(document.getElementById('parcial1').value) || 0;
+            const parcial2 = parseFloat(document.getElementById('parcial2').value) || 0;
+            const promedio = (parcial1 + parcial2) / 2;
+            document.getElementById('promedio').value = promedio.toFixed(2);
+        }
+    </script>
 </head>
 <body>
     <h1>Asignación de Calificaciones</h1>
@@ -143,10 +155,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['materia_id'], $_POST[
                 ?>
             </select>
 
-            <label for="calificacion">Calificación:</label>
-            <input type="text" name="calificacion" id="calificacion" required>
+            <!-- Campo para ingresar Parcial 1 -->
+            <label for="parcial1">Parcial 1:</label>
+            <input type="text" name="parcial1" id="parcial1" required oninput="calcularPromedio()">
 
-            <input type="submit" value="Asignar Calificación">
+            <!-- Campo para ingresar Parcial 2 -->
+            <label for="parcial2">Parcial 2:</label>
+            <input type="text" name="parcial2" id="parcial2" required oninput="calcularPromedio()">
+
+            <!-- Campo para mostrar el Promedio (readonly) -->
+            <label for="promedio">Promedio:</label>
+            <input type="text" name="promedio" id="promedio" readonly>
+
+            <input type="submit" value="Asignar Calificaciones">
         </form>
 
         <?php if (!empty($message)): ?>
@@ -154,9 +175,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['materia_id'], $_POST[
         <?php endif; ?>
 
         <div class="footer">
-    <button onclick="window.location.href='panel_docente.php';">Regresar</button>
-</div>
-
+            <button onclick="window.location.href='panel_docente.php';">Regresar</button>
+        </div>
     </div>
 </body>
 </html>

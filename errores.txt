@@ -1,0 +1,2 @@
+Error: INSERT INTO Estudiante (nombre, apellido, correo, contraseña, nivel_matricula) VALUES ('Alexis', 'Huera', 'alexis@estudiante.com', '81dc9bdb52d04dc20036dbd8313ed055', '4')
+Duplicate entry 'Huera' for key 'usuario'

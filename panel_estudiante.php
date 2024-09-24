@@ -69,7 +69,7 @@ $correo_estudiante = $_SESSION['usuario'];
     <p>Aquí puedes ver tus calificaciones y realizar otras tareas.</p>
 
     <div class="footer">
-        <button onclick="window.location.href='index.php';">Regresar al Inicio</button>
+        <button onclick="window.location.href='index.php';">Cerrar Sesión</button>
     </div>
 </body>
 </html>
